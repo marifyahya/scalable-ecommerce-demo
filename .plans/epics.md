@@ -1,86 +1,87 @@
 # Product Backlog (Epics & Tasks)
 
-Dokumen ini berfungsi sebagai pengganti Jira / Trello / Kanban board kita. Di sini, seluruh *Development Roadmap* dari `blueprint.md` dipecah menjadi **Epic** dan **Task** yang siap dieksekusi secara berurutan.
+This document serves as our Jira / Trello / Kanban board replacement. Here, the entire *Development Roadmap* from `blueprint.md` is broken down into sequential **Epics** and **Tasks**.
 
-Setiap *task* yang selesai akan ditandai dengan `[x]`.
+Completed tasks will be marked with `[x]`.
 
 ---
 
 ## Epic 1: Foundation & Infrastructure
-**Goal:** Membangun fondasi monorepo dan menyalakan semua *database/broker* secara lokal.
-- [x] **TASK-101:** Membuat struktur *folder* monorepo untuk 7 service.
-- [x] **TASK-102:** Meracik `docker-compose.yml` untuk PostgreSQL (4 database terpisah).
-- [x] **TASK-103:** Menambahkan Cassandra, Redis, RabbitMQ, dan OpenSearch ke Docker.
-- [x] **TASK-104:** Menambahkan *stack* Observability (Prometheus, Loki, Grafana) ke Docker.
+**Goal:** Build the monorepo foundation and spin up all local databases/brokers.
+- [x] **TASK-101:** Create the monorepo folder structure for 7 services.
+- [x] **TASK-102:** Configure `docker-compose.yml` for PostgreSQL (4 separate databases).
+- [x] **TASK-103:** Add Cassandra, Redis, RabbitMQ, and OpenSearch to Docker.
+- [x] **TASK-104:** Add Observability stack (Prometheus, Loki, Grafana) to Docker.
 
 ---
 
 ## Epic 2: Identity & Edge
-**Goal:** Mengamankan pintu masuk dan mengatur otentikasi JWT.
-- [x] **TASK-201:** Inisialisasi API Gateway (Go/Fiber).
-- [ ] **TASK-202:** Implementasi Redis Rate Limiter di Gateway (Bypass support).
-- [ ] **TASK-203:** Inisialisasi User Service (Node.js/NestJS) & koneksi DB.
-- [ ] **TASK-204:** Implementasi endpoint Registrasi (`POST /register`) & bcrypt.
-- [ ] **TASK-205:** Implementasi endpoint Login (`POST /login`) & JWT Generation.
-- [ ] **TASK-206:** Implementasi Stateless JWT Validation & Header Injection di Gateway.
+**Goal:** Secure the entry point and manage JWT authentication.
+- [x] **TASK-201:** Initialize API Gateway (Go/Fiber).
+- [x] **TASK-202:** Implement Redis Rate Limiter in Gateway (with bypass support).
+- [ ] **TASK-203:** Initialize User Service (Node.js/NestJS), `.env` config, & DB connection.
+- [ ] **TASK-204:** Implement Registration endpoint (`POST /register`) & bcrypt.
+- [ ] **TASK-205:** Implement Login endpoint (`POST /login`) & JWT Generation.
+- [ ] **TASK-206:** Implement Stateless JWT Validation & Header Injection in Gateway.
 
 ---
 
 ## Epic 3: Catalog & Search (CQRS)
-**Goal:** Mengelola data buku dan sinkronisasi otomatis ke mesin pencari.
-- [ ] **TASK-301:** Inisialisasi Product Service (Go/Gin) & koneksi DB.
-- [ ] **TASK-302:** Implementasi CRUD Katalog Buku (Admin).
-- [ ] **TASK-303:** Inisialisasi Product Search Service (Python/FastAPI) & koneksi OpenSearch.
-- [ ] **TASK-304:** Implementasi RabbitMQ Publisher di Product Service (`ProductUpdated`).
-- [ ] **TASK-305:** Implementasi RabbitMQ Consumer di Search Service (Indexing ke OpenSearch).
-- [ ] **TASK-306:** Implementasi endpoint Pencarian (`GET /search`).
+**Goal:** Manage book data and synchronize automatically with the search engine.
+- [ ] **TASK-301:** Initialize Product Service (Go/Gin), `.env` config, & DB connection.
+- [ ] **TASK-302:** Implement Book Catalog CRUD (Admin).
+- [ ] **TASK-303:** Implement Public Catalog endpoints (`GET /products` & `GET /products/:id`).
+- [ ] **TASK-304:** Initialize Product Search Service (Python/FastAPI) & OpenSearch connection.
+- [ ] **TASK-305:** Implement RabbitMQ Publisher in Product Service (`ProductUpdated`).
+- [ ] **TASK-306:** Implement RabbitMQ Consumer in Search Service (Indexing to OpenSearch).
+- [ ] **TASK-307:** Implement Search endpoint (`GET /search`).
 
 ---
 
 ## Epic 4: Shopping Cart
-**Goal:** Membuat keranjang belanja abadi yang tangguh dengan NoSQL.
-- [ ] **TASK-401:** Inisialisasi Cart Service (Node.js/Express) & koneksi Cassandra.
-- [ ] **TASK-402:** Implementasi logika *Upsert* (Add to Cart / Update Qty).
-- [ ] **TASK-403:** Implementasi endpoint Get Cart & Clear Cart.
+**Goal:** Create a resilient, persistent shopping cart using NoSQL.
+- [ ] **TASK-401:** Initialize Cart Service (Node.js/Express) & Cassandra connection.
+- [ ] **TASK-402:** Implement Upsert logic (Add to Cart / Update Qty).
+- [ ] **TASK-403:** Implement Get Cart and Clear Cart endpoints.
 
 ---
 
 ## Epic 5: Transactions & Soft-Booking
-**Goal:** Jantung e-commerce: validasi stok, *locking*, dan pembuatan pesanan.
-- [ ] **TASK-501:** Inisialisasi Order Service (PHP/Laravel) & koneksi DB.
-- [ ] **TASK-502:** Implementasi HTTP Client untuk validasi stok ke Product Service (Sync).
-- [ ] **TASK-503:** Implementasi logika Redis Soft-Booking (TTL 15 menit).
-- [ ] **TASK-504:** Implementasi endpoint Checkout (`POST /checkout`).
-- [ ] **TASK-505:** Implementasi Cron Job (Laravel Scheduler) untuk menyapu pesanan *Expired*.
+**Goal:** The heart of e-commerce: stock validation, locking, and order creation.
+- [ ] **TASK-501:** Initialize Order Service (PHP/Laravel), `.env` config, & DB connection.
+- [ ] **TASK-502:** Implement HTTP Client for stock validation to Product Service (Sync).
+- [ ] **TASK-503:** Implement Redis Soft-Booking logic using `SETNX` (15-minute TTL).
+- [ ] **TASK-504:** Implement Checkout endpoint (`POST /checkout`) and trigger Cart clearing.
+- [ ] **TASK-505:** Implement Cron Job (Laravel Scheduler) to sweep `Expired` orders.
 
 ---
 
 ## Epic 6: Payments & Async Events
-**Goal:** Menerima pembayaran dan memicu reaksi berantai di latar belakang.
-- [ ] **TASK-601:** Inisialisasi Payment Service (Node.js/Express).
-- [ ] **TASK-602:** Implementasi integrasi Xendit API (Create Invoice).
-- [ ] **TASK-603:** Implementasi validasi Xendit Webhook Callback.
-- [ ] **TASK-604:** Implementasi RabbitMQ Publisher (`OrderPaid`).
-- [ ] **TASK-605:** Implementasi RabbitMQ Consumer di Order Service (Update status ke PAID).
-- [ ] **TASK-606:** Inisialisasi Notification Service (Go/Python) tanpa HTTP server.
-- [ ] **TASK-607:** Implementasi RabbitMQ Consumer & pengiriman Email SMTP.
+**Goal:** Accept payments and trigger background chain reactions.
+- [ ] **TASK-601:** Initialize Payment Service (Node.js/Express) & `.env` config.
+- [ ] **TASK-602:** Implement Xendit API integration (Create Invoice).
+- [ ] **TASK-603:** Implement Xendit Webhook Callback validation.
+- [ ] **TASK-604:** Implement RabbitMQ Publisher (`OrderPaid`).
+- [ ] **TASK-605:** Implement RabbitMQ Consumer in Order Service (Update status to PAID).
+- [ ] **TASK-606:** Initialize Notification Service (Go) without an HTTP server.
+- [ ] **TASK-607:** Implement RabbitMQ Consumer & SMTP Email delivery.
 
 ---
 
 ## Epic 7: Observability & Load Testing
-**Goal:** Memantau kesehatan sistem dan menyiksanya hingga batas maksimal.
-- [ ] **TASK-701:** Standardisasi format JSON Logging di semua 7 service.
-- [ ] **TASK-702:** Setup *Dashboard* Grafana (Membaca metrik Prometheus & log Loki).
-- [ ] **TASK-703:** Menulis *script* k6 untuk Load Testing (Trafik Normal).
-- [ ] **TASK-704:** Menulis *script* k6 untuk Spike Testing (Flash Sale dengan Bypass Header).
+**Goal:** Monitor system health and push it to its limits.
+- [ ] **TASK-701:** Standardize JSON Logging format across all 7 services.
+- [ ] **TASK-702:** Setup Grafana Dashboard (Reading Prometheus metrics & Loki logs).
+- [ ] **TASK-703:** Write k6 script for Load Testing (Normal Traffic).
+- [ ] **TASK-704:** Write k6 script for Spike Testing (Flash Sale using Bypass Header).
 
 ---
 
 ## Epic 8: Frontend Web (Svelte SPA)
-**Goal:** Membangun antarmuka pengguna yang super cepat tanpa *Virtual DOM*.
-- [ ] **TASK-801:** Inisialisasi proyek Svelte + Vite + Tailwind CSS (`frontend-web/`).
-- [ ] **TASK-802:** Konfigurasi HTTP Client (Axios/Fetch) untuk menembak API Gateway.
-- [ ] **TASK-803:** Implementasi Halaman Katalog (Grid Buku).
-- [ ] **TASK-804:** Implementasi Halaman Keranjang Belanja.
-- [ ] **TASK-805:** Implementasi Halaman *Checkout* (Terintegrasi dengan simulasi Xendit).
-- [ ] **TASK-806:** Implementasi Halaman Riwayat Pesanan (Memanggil API Stitching BFF).
+**Goal:** Build a blazing fast user interface without a Virtual DOM.
+- [ ] **TASK-801:** Initialize Svelte + Vite + Tailwind CSS project (`frontend-web/`).
+- [ ] **TASK-802:** Configure HTTP Client (Axios/Fetch) to hit API Gateway.
+- [ ] **TASK-803:** Implement Catalog Page (Book Grid).
+- [ ] **TASK-804:** Implement Shopping Cart Page.
+- [ ] **TASK-805:** Implement Checkout Page (Integrated with simulated Xendit).
+- [ ] **TASK-806:** Implement Order History Page (Calling API Stitching BFF).

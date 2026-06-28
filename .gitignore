@@ -5,3 +5,11 @@
 
 # Docker
 docker-compose.override.yml
+
+# Agents
+.agents
+
+# Go & Air (Hot Reload)
+**/tmp/
+build-errors.log
+*.out

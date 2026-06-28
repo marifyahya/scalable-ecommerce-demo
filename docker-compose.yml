@@ -1,10 +1,12 @@
-version: "3.8"
-
 services:
   api-gateway:
     build: ./api-gateway
     container_name: api_gateway
     restart: unless-stopped
+    env_file:
+      - ./api-gateway/.env
+    volumes:
+      - ./api-gateway:/app
     networks:
       - tukubuku-network
 
@@ -73,7 +75,7 @@ services:
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - "--config.file=/etc/prometheus/prometheus.yml"
     restart: unless-stopped
     networks:
       - tukubuku-network

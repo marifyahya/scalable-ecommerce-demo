@@ -1,28 +1,17 @@
-# Build stage
-FROM golang:alpine AS builder
+FROM golang:alpine
 
 WORKDIR /app
 
-# Install dependencies
+# Install Air for hot-reloading
+RUN go install github.com/air-verse/air@latest
+
+# Copy go mod files
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy source code
-COPY . .
+# Note: We don't COPY the rest of the files because docker-compose will mount the local directory as a volume
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o api-gateway .
-
-# Final stage
-FROM alpine:latest
-
-WORKDIR /app
-
-# Copy the binary from the builder stage
-COPY --from=builder /app/api-gateway .
-
-# Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["./api-gateway"]
+# Start Air
+CMD ["air", "-c", ".air.toml"]
