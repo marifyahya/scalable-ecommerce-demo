@@ -1,0 +1,106 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user_postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra_db
+    environment:
+      CASSANDRA_CLUSTER_NAME: "tukubuku_cluster"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_cache
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq_broker
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  opensearch:
+    image: opensearchproject/opensearch:2.11.0
+    container_name: opensearch_node
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: "true"
+      OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  loki:
+    image: grafana/loki:2.9.3
+    container_name: loki
+    volumes:
+      - ./docker/loki/local-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    restart: unless-stopped
+    networks:
+      - tukubuku-network
+
+volumes:
+  postgres_data:
+  cassandra_data:
+  redis_data:
+  rabbitmq_data:
+  opensearch_data:
+  grafana_data:
+
+networks:
+  tukubuku-network:
+    driver: bridge
