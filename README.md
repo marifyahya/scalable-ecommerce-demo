@@ -1,5 +1,7 @@
 # Tukubuku
 
+**Status: Under Development (Work In Progress)**
+
 A polyglot e-commerce microservices system built for learning and portfolio purposes. The architecture applies enterprise-grade patterns — event-driven communication, CQRS, distributed data stores, and a full observability stack — to a small bookstore domain.
 
 ## Architecture Overview

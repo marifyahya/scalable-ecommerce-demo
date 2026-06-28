@@ -17,7 +17,7 @@ Setiap *task* yang selesai akan ditandai dengan `[x]`.
 
 ## Epic 2: Identity & Edge
 **Goal:** Mengamankan pintu masuk dan mengatur otentikasi JWT.
-- [ ] **TASK-201:** Inisialisasi API Gateway (Go/Fiber).
+- [x] **TASK-201:** Inisialisasi API Gateway (Go/Fiber).
 - [ ] **TASK-202:** Implementasi Redis Rate Limiter di Gateway (Bypass support).
 - [ ] **TASK-203:** Inisialisasi User Service (Node.js/NestJS) & koneksi DB.
 - [ ] **TASK-204:** Implementasi endpoint Registrasi (`POST /register`) & bcrypt.
